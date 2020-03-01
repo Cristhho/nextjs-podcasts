@@ -1,35 +1,50 @@
 import fetch from 'isomorphic-unfetch';
-import Link from 'next/link';
 
+import Error from './_error.js';
 import Layout from '../components/Layout';
 import ChannelGrid from '../components/ChannelGrid';
 import PodcastList from '../components/PodcastList';
 
 export default class extends React.Component {
 
-	static async getInitialProps({query}) {
+	static async getInitialProps({query, res}) {
 		let idChannel = query.id;
 
-		let[reqChannel, reqAudios, reqSeries] = await Promise.all([
-			fetch(`https://api.audioboom.com/channels/${idChannel}`),
-			fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`),
-			fetch(`https://api.audioboom.com/channels/${idChannel}/child_channels`)
-		]);
-		
-		let dataChannel = await reqChannel.json();
-		let channel = dataChannel.body.channel;
+		try{
+			let[reqChannel, reqAudios, reqSeries] = await Promise.all([
+				fetch(`https://api.audioboom.com/channels/${idChannel}`),
+				fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`),
+				fetch(`https://api.audioboom.com/channels/${idChannel}/child_channels`)
+			]);
 
-		let dataAudios = await reqAudios.json();
-		let audios = dataAudios.body.audio_clips;
+			if(reqChannel.status >= 400){
+				res.statusCode = reqChannel.status;
+				return {channel:null, audios:null, series:null, statusCode:reqChannel.status}
+			}
+			
+			let dataChannel = await reqChannel.json();
+			let channel = dataChannel.body.channel;
 
-		let dataSeries = await reqSeries.json();
-		let series = dataSeries.body.channels;
+			let dataAudios = await reqAudios.json();
+			let audios = dataAudios.body.audio_clips;
 
-		return {channel, audios, series}
+			let dataSeries = await reqSeries.json();
+			let series = dataSeries.body.channels;
+
+			return {channel, audios, series, statusCode:200}
+		} catch(error) {
+			res.statusCode = 503;
+			return {channel:null, audios:null, series:null, statusCode:503}
+		}
 	}
 
 	render() {
-		const {channel, audios, series} = this.props;
+		const {channel, audios, series, statusCode} = this.props;
+
+		if(statusCode != 200) {
+			return <Error statusCode={statusCode} />
+		}
+
 		return(
 			<Layout title={`${channel.title}`} navLink="/" navText="Podcasts">
 				<style jsx>{`
