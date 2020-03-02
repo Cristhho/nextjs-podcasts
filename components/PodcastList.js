@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
+
+import {Link} from '../routes';
+import slug from '../helpers/slug';
 
 export default class PodcastList extends Component {
 	render() {
@@ -29,8 +31,14 @@ export default class PodcastList extends Component {
 	        }
 				`}</style>
 				{ podcasts.map((clip) => (
-					<Link href={`/podcast?id=${clip.id}`} key={clip.id}>
-	        	<a className="podcast" key={clip.id}>
+					<Link route='podcast'
+						params={{
+							slugChannel: slug(clip.channel.title),
+							idChannel: clip.channel.id,
+							slug: slug(clip.title),
+							id: clip.id
+						}} key={clip.id}>
+	        	<a className="podcast">
 	        		<h3>{ clip.title }</h3>
 	        		<div className='meta'>
 	              { Math.ceil(clip.duration / 60) } minutes

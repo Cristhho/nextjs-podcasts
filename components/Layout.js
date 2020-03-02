@@ -1,9 +1,10 @@
-import Link from 'next/link';
 import Head from 'next/head';
+
+import {Link} from '../routes';
 
 export default class Layout extends React.Component {
   render() {
-    const { children, title, navLink, navText } = this.props
+    const { children, title, route, params, navText } = this.props
 
     return <div>
       <Head>
@@ -31,7 +32,7 @@ export default class Layout extends React.Component {
         }
       `}</style>
 
-      <header><Link href={navLink}><a>{navText}</a></Link></header>
+      <header><Link route={route} params={params}><a>{navText}</a></Link></header>
 
       { children }
     </div>

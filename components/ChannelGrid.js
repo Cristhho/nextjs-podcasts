@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
+
+import {Link} from '../routes';
+import slug from '../helpers/slug';
 
 export default class ChannelGrid extends Component {
 	render() {
@@ -35,7 +37,11 @@ export default class ChannelGrid extends Component {
 	      `}</style>
 				{
 					channels.map((channel) => (
-						<Link href={`/channel?id=${channel.id}`} key={channel.id} prefetch>
+						<Link route='channel'
+							params={{
+								slug: slug(channel.title),
+								id: channel.id
+							}} key={channel.id} prefetch>
 							<a className="channel">
 								<img src={channel.urls.logo_image.original} />
 								<h2>{channel.title}</h2>

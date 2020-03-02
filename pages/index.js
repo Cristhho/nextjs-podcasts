@@ -25,7 +25,7 @@ export default class extends React.Component {
 		}
 
 		return (
-			<Layout title="Podcasts" navLink="/" navText="Podcasts">
+			<Layout title="Podcasts" route="home" params={{}} navText="Podcasts">
 				<ChannelGrid channels={channels} />
 			</Layout>
 		);

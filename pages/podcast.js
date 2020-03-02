@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import Layout from '../components/Layout';
+import slug from '../helpers/slug';
 
 export default class extends React.Component {
 
@@ -17,7 +16,15 @@ export default class extends React.Component {
 	render() {
 		const {audio} = this.props;
 		return(
-			<Layout title={`${audio.title}`} navLink={`/channel?id=${audio.channel.id}`} navText="&lt; Volver">
+			<Layout
+				title={`${audio.title}`}
+				route='channel'
+				params={{
+					slug: slug(audio.channel.title),
+					id: audio.channel.id
+				}}
+				navLink={`/channel?id=${audio.channel.id}`}
+				navText="&lt; Volver">
 				<style jsx>{`
 	        .clip {
 	          display: flex;

@@ -46,7 +46,7 @@ export default class extends React.Component {
 		}
 
 		return(
-			<Layout title={`${channel.title}`} navLink="/" navText="Podcasts">
+			<Layout title={`${channel.title}`} route="home" params={{}} navText="Podcasts">
 				<style jsx>{`
 	        .banner {
 	          width: 100%;
