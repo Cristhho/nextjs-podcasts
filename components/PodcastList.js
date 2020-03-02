@@ -5,7 +5,7 @@ import slug from '../helpers/slug';
 
 export default class PodcastList extends Component {
 	render() {
-		const {podcasts} = this.props;
+		const {podcasts, onClickPodcast} = this.props;
 
 		return (
 			<div>
@@ -38,7 +38,7 @@ export default class PodcastList extends Component {
 							slug: slug(clip.title),
 							id: clip.id
 						}} key={clip.id}>
-	        	<a className="podcast">
+	        	<a className="podcast" onClick={(event) => onClickPodcast(event, clip)}>
 	        		<h3>{ clip.title }</h3>
 	        		<div className='meta'>
 	              { Math.ceil(clip.duration / 60) } minutes
